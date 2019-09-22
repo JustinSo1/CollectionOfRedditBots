@@ -1,16 +1,10 @@
 import sys
 import time
 import praw
-import config
 
 
-def bot_login():
-    return praw.Reddit(username=config.username,
-                       password=config.password,
-                       client_id=config.client_id,
-                       client_secret=config.client_secret,
-                       user_agent=config.username + "'s newsletter bot v01"
-                       )
+def authenticate():
+    return praw.Reddit('newsletterbot', user_agent="newsletter bot v01")
 
 
 def get_usernames(filename):
@@ -34,16 +28,21 @@ def send_message(bot, username, subject, body):
     print("Sent message to  " + username + "!")
 
 
-if len(sys.argv) != 4:
-    print("usage: Newsletter_bot.py file \"subject\" \"body\"")
+def main():
+    if len(sys.argv) != 4:
+        print("usage: Newsletter_bot.py file \"subject\" \"body\"")
 
-filename = sys.argv[1]
-subject = sys.argv[2]
-body = sys.argv[3]
+    filename = sys.argv[1]
+    subject = sys.argv[2]
+    body = sys.argv[3]
 
-reddit_bot = bot_login()
-username = get_usernames(filename)
+    reddit_bot = authenticate()
+    username = get_usernames(filename)
 
-for user in username:
-    send_message(reddit_bot, user, subject, body)
-    time.sleep(5)
+    for user in username:
+        send_message(reddit_bot, user, subject, body)
+        time.sleep(5)
+
+
+if __name__ == '__main__':
+    main()
