@@ -4,7 +4,7 @@ import praw
 
 
 def main():
-    keyword = "Viberg"
+    keyword = input("Enter keyword to search for: ")
     file_name = 'usernames.txt'
     questions_file = 'questions.txt'
     # Time delay required by Reddit
@@ -14,7 +14,7 @@ def main():
     reddit_bot = authenticate()
     username = get_usernames(file_name)
     question = questions_database(questions_file)
-    subreddit_name = "FrugalMaleFashionCDN"
+    subreddit_name = input("Enter subreddit name to search in (E.g FrugalMaleFashionCDN): ")
     subject = keyword + " submission found!"
     while True:
         run_bot(reddit_bot, subreddit_name, username, keyword, time_delay, subject, question)
@@ -55,9 +55,9 @@ def send_message(bot, username, subject, body):
         bot.redditor(username).message(subject, body)
     except praw.exceptions.APIException as e:
         if "USER_DOESNT_EXIST" in e.args[0]:
-            print("redditor " + username + " not found, no message sent")
+            print("Redditor " + username + " not found, no message sent")
         return
-    print("Sent message to  " + username + "!")
+    print("Sent message to " + username + "!")
 
 
 def run_bot(bot, subreddit, user_list: set, keyword, time_delay, subject, question):
